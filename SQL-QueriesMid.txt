@@ -1,0 +1,79 @@
+>>>>> cd C:\xampp\mysql\bin
+>>>>> mysql -u root -p -h 127.0.0.1
+01. create database cse;
+02. create table student(ID int(2), NAME varchar(20),DEPT varchar(5),AGE int(2),ADDRESS varchar(15));
+03. desc student;
+04. insert into student(ID,NAME,DEPT,AGE,ADDRESS)values('1','Md. Abdur Rouf','CSE','21','MH Hall');
+05. select * from student;
+06. update student set AGE=22 where ID=3;
+07. alter table student add PHONE_NO int(11);
+08. alter table student drop PHONE_NO;
+09. alter table student change ID ROLL int(2);
+10. alter table student modify ROLL char(2);
+11. rename table info to student;
+12. delete from student where ROLL=5;
+13. truncate table student;
+14. drop table student;
+15. select sum(SALES) from product_details;
+16. select avg(SALES) from product_details;
+17. select SALES,if(SALES > 1500, 'HIGH', if(SALES < 1200,'LOW','MEDIUM')) as RESULT from product_details;
+18. select min(MF_DATE) from product_details;
+19. select max(SALES) from product_details where P_ID<103;
+20. select sum(Salary),case when sum(Salary) >55000 then 'Good'else 'Better' end as Remark from employee group by Dept;
+21. select Name from employee where Date_of_join> '2014-8-11';
+22. select max(Salary), case when max(Salary) > 60000 then 'High' else 'Low' end as Remark from employee group by Dept;
+23. create view sos as select sum(AGE) from student1;
+24. create view loys1 as select NAME, min(AGE) from student1 group by DEPT;
+25. create view locse as select NAME from student1 where DEPT= 'CSE';
+26. create view locse1 as select * from student1 where DEPT= 'CSE';
+27. create view rEEE as select * from student1 where DEPT= 'EEE';
+28. create view oldest as select NAME, max(AGE) from student1 group by DEPT;
+29. select sum(distinct salary) from employee;
+30. Procedure:
+
+# To Show a Table using Procedure
+-> delimiter /
+-> create procedure showStudents()
+-> begin
+-> select * from student;
+-> end /
+-> call showStudents() /
+
+# To Show Speciific Information
+-> delimiter $
+-> create procedure showInfo(in idd int)
+-> begin
+-> select * from student where id=idd;
+-> end $
+-> call showInfo() $
+
+31. Function in MYSQL:
+
+#To Find the Area of a Circle Using Function
+-> delimiter $
+-> create function area_circle(radius int(5))
+-> returns float
+-> begin
+-> return 3.1416*radius*radius;
+-> end $
+-> select area_circle(3) $
+
+# A function to insert data based upon specific condition
+-> delimiter $
+-> create function data_insert(id int(10),name varcher(20))
+-> returns text
+-> begin
+-> if id>4 then
+-> insert into customer(c_id,c_name) values(id,name);
+-> return "Successfully inserted;
+-> else
+-> return "Not inserted";
+-> end if;
+-> end $
+-> select data_insert(5,"Rouf") $
+
+33. select * from teachers where year(T_dob)=1993 and month(T_dob)=05;
+34. select count(dept),max(T_salary) from teachers where dept='CSE';
+35. select * from teachers where T_salary between 20000 and 50000 and dept not in ('CSE');
+36. select distinct T_salary from teachers;
+37. select T_name from teachers order by T_name ase;

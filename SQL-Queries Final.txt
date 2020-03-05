@@ -1,0 +1,275 @@
+>>>>> cd C:\xampp\mysql\bin
+>>>>> mysql -u root -p -h 127.0.0.1
+01. create database cse;
+02. create table student(ID int(2), NAME varchar(20),DEPT varchar(5),AGE int(2),ADDRESS varchar(15));
+03. desc student;
+04. insert into student(ID,NAME,DEPT,AGE,ADDRESS)values('1','Md. Abdur Rouf','CSE','21','MH Hall');
+05. select * from student;
+06. update student set AGE=22 where ID=3;
+07. alter table student add PHONE_NO int(11);
+08. alter table student drop PHONE_NO;
+09. alter table student change ID ROLL int(2);
+10. alter table student modify ROLL char(2);
+11. rename table info to student;
+12. delete from student where ROLL=5;
+13. truncate table student;
+14. drop table student;
+15. select sum(SALES) from product_details;
+16. select avg(SALES) from product_details;
+
+
+Experiment No: 07
+Experiment Name: Create Table and Before Insert data into it using Trigger. 
+SQL Queries:
+i.	create table student(ID int(2), Name varchar(15), Age int(5), Adult varchar(5));
+
+Create Trigger:
+delimiter /
+create trigger insertion before insert
+	on student
+	for each row
+	begin
+	if new.Age > 18 then
+	set new.Adult = 'YES';
+	else
+	set new.Adult = 'NO';
+	end if ;
+	end /
+
+ii.	insert into student(ID, Name, Age)values(‘1’,’Masud Rana’,’22’) /
+iii.	select * from student /
+
+Experiment No: 07
+Experiment Name: Create Table and After Insert data into it using Trigger. 
+
+SQL Queries:
+i.	create table student(ID int(2), Name varchar(15), Age int(5));
+ii.	create table insertion_details(ID int(2), Action varchar(15), Time date);
+
+
+Create Trigger:
+delimiter /
+create trigger insertion after  insert
+	on student
+	for each row
+	begin
+	insert into insertion_details (ID, Action, Time)values(new.ID, ‘Insert Success’, now());
+	end /
+
+i.	insert into student(ID, Name, Age)values(‘1’,’Masud Rana’,’22’) /
+ii.	select * from student / 
+iii.	select * from insertion_details / 
+
+
+
+Experiment No: 08
+Experiment Name: Create Table and Update data into it using Trigger. 
+
+SQL Queries:
+Before Update
+
+i.	create table DepartmentOne(D_ID int(2), D_Name varchar(15), D_Sales int(10));
+
+ii.	create table Before_Update (D_ID int(2), D_Name varchar(10),Action varchar(15), Date date);
+
+Create Trigger:
+delimiter /
+create trigger update_details before update
+	on DepartmentOne
+	for each row
+	begin
+	insert into Before_Update (D_ID, D_Name, Action, Date)values(old.D_ID,old.D_Name, ‘Updated’,  now());
+	end /
+
+iii.	insert into DepartmentOne(D_ID, D_Name, D_Sales)values(‘101’, ’Finance’, ’27500’) /
+
+iv.	update DepartmentOne set D_Name =’Marketing’ where D_ID =’101’ /
+
+v.	select * from DepartmentOne / 
+
+vi.	select * from Before_Update
+
+
+SQL Queries:
+After Update
+
+i.	create table DepartmentTwo(D_ID int(2), D_Name varchar(15), D_Sales int(10));
+
+ii.	create table After_Update (D_ID int(2), D_Name varchar(10),Action varchar(15), Date date);
+
+Create Trigger:
+delimiter /
+create trigger update_detailsTwo after update
+	on DepartmentTwo
+	for each row
+	begin
+	insert into After_Update (D_ID, D_Name, Action, Date)values(new.D_ID,new.D_Name, ‘Updated’,  now());
+	end /
+
+iii.	insert into DepartmentTwo (D_ID, D_Name, D_Sales)values(‘202’, ’Marketing’, ’37500’) /
+
+iv.	update DepartmentTwo set D_Name =’Research’ where D_ID =’202’ /
+
+v.	select * from DepartmentTwo / 
+
+vi.	select * from After_Update /  
+
+
+
+
+Experiment No: 09
+Experiment Name: Create Table and Delete Data into it Using Trigger.
+
+SQL Queries:
+Before Delete
+
+i.	create table Product(P_No int(5) primary key auto_increment, P_Name varchar(10), Sales int(10));
+
+ii.	create table Delete_Details(P_No int(5) primary key auto_increment, Delete_Data varchar(10), Date date);
+
+Create Trigger:
+delimiter /
+create trigger delete_info before delete 
+	on Product
+	for each row
+	begin
+	insert into Delete_Details(Delete_Data, Date)values(old.P_Name, now()); 
+	end /
+
+iii.	delete from Product where P_No=’1’/  
+
+iv.	select * from Delete_Details/
+
+
+
+
+
+SQL Queries:
+After Delete
+
+i.	create table Product(P_No int(5) primary key auto_increment, P_Name varchar(10), Sales int(10));
+
+ii.	create table Total_Sales(Total int(10));
+
+iii.	insert into Total_Sales(Total) select sum(Sales) from Product ;
+
+iv.	select * from Total_Sales;
+
+Create Trigger:
+delimiter /
+create trigger after_delete after delete
+	on Product
+	for each row
+	begin
+	update Total_Sales set Total= Total - old.Sales;
+	end /
+
+v.	delete from Product where P_No = ‘4’/
+
+vi.	select * from Total_Sales/
+
+
+
+
+Experiment No: 10
+Experiment Name: Write SQL Queries to Implement Foreign Key Constraint.
+
+SQL Queries:
+i.	create table persons(ID int primary key, Name varchar(10), Age int(5));
+
+
+ii.	create table orders(O_No int(5),O_Name varchar(10),Date date, ID int,foreign key(ID) references persons(ID) on update cascade on delete cascade);
+
+
+iii.	insert into persons(ID,Name,Age)values(132,'Ratul',23);
+
+
+iv.	select * from persons;
+
+
+v.	insert into orders(O_No,O_Name,Date,ID)values(1,'Shoe','2018-03-01',132);
+
+
+vi.	select * from orders;
+
+
+vii.	update persons set ID= 131 where ID=132;
+
+viii.	select * from persons;
+
+ix.	select * from orders;
+
+
+x.	delete from persons where ID=131;
+
+xi.	select * from persons;
+
+xii.	select * from orders;
+
+
+Experiment No: 11
+Experiment Name: Write SQL Queries to Add and Drop Foreign Key Constraints.
+
+SQL Queries:
+
+i.	create table employee(ID int(5), Name varchar(10), Age int(5), primary key(ID,Name));
+
+
+ii.	create table mobile_details(ID int(5), Name varchar(10),Brand varchar(10), constraint FOREN_RULE foreign key(ID,Name) references employee(ID,Name) on update cascade on delete cascade);
+
+iii.	insert into employee(ID,Name,Age)values(1,'Ratul',23);
+
+
+iv.	select * from employee;
+
+v.	insert into mobile_details(ID,Name,Brand)values(1,'Ratul','BlackBerry');
+
+
+vi.	select * from mobile_details;
+
+vii.	update employee set Name ='Akbar' where ID = 1;
+
+
+viii.	select * from employee;
+
+ix.	select * from mobile_details;
+
+
+x.	alter table mobile_details drop foreign key FOREN_RULE;
+
+xi.	alter table mobile_details add constraint FRN_RULE foreign key(ID,Name) references employee(ID,Name) on update cascade on delete cascade;
+
+
+
+Experiment No: 12
+Experiment Name: Write SQL Queries to Create Cursor.
+
+SQL Queries:
+i.	create table  employee( ID int(5), Name varchar(10), Age int(5), Salary int(10));
+ii.	insert into employee(ID, Name, Age, Salary) values (1, ‘Masud’, 23, 12000);
+
+delimiter /
+create procedure show_name_age() 
+	begin
+	declare P_Name varchar(10) ;
+	declare P_Age int(5) ;
+	declare P_Salary int(10) ;
+	declare P_Finished int default 0 ;
+	declare c1 cursor for select Name, Age, Salary from employee ;
+	declare continue handler for NOT FOUND set P_Finished = 1 ;
+	open c1 ;
+	get_employee: loop
+	fetch c1 into P_Name, P_Age, P_Salary ;
+	if P_Finished = 1 then
+	leave get_employee ;
+	end if ;
+	if P_Salary > 10000 then
+	select concat(P_Name, ‘ – ‘, P_Age) ;
+	end if ;
+	end loop get_employee ;
+	close c1 ;
+	end /
+
+
+iii.	call show_name_age()
+
